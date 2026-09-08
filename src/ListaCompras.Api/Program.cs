@@ -1,13 +1,20 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using ListaCompras.Core.Entities;
+using ListaCompras.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog();
 
 // Add services to the container.
-builder.Services.AddDbContext<ListaCompras.Infrastructure.Data.AppDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddCors(options =>
 {
