@@ -1,0 +1,71 @@
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+*.sln.iml
+
+# VS Code
+.vscode/
+*.vscode/
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+
+# Entity Framework Core Migrations (opcional - mantenha se quiser versionar)
+# **/Migrations/*.cs
+# **/Migrations/*.Designer.cs
+
+# Test results
+TestResults/
+*.trx
+*.vtrx
+coverage.cobertura.xml
+coverage.opencover.xml
+
+# BenchmarkDotNet
+BenchmarkDotNet.Artifacts/
+
+# dotnet tool
+.tools/
+
+# User secrets
+**/secrets.json
+
+# Docker
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Local development
+appsettings.Development.json
+appsettings.Local.json
+*.db
+*.sqlite
+*.sqlite3
