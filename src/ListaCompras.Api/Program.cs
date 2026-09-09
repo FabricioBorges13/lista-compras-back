@@ -7,6 +7,7 @@ using System.Text;
 using ListaCompras.Core.Entities;
 using ListaCompras.Core.Repositories;
 using ListaCompras.Core.Services;
+using ListaCompras.Core.Services.ShoppingList;
 using ListaCompras.Infrastructure.Data;
 using ListaCompras.Infrastructure.Repositories;
 
@@ -57,6 +58,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IShoppingListRepository, ShoppingListRepository>();
+builder.Services.AddScoped<IShoppingListService, ShoppingListService>();
 
 builder.Services.AddCors(options =>
 {
