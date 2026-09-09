@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using ListaCompras.Core.Entities;
+using ListaCompras.Core.Services;
 
 namespace ListaCompras.Api.Controllers;
 
@@ -18,15 +18,18 @@ public class AuthController : ControllerBase
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IConfiguration _configuration;
+    private readonly IJwtTokenService _jwtTokenService;
 
     public AuthController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IJwtTokenService jwtTokenService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _configuration = configuration;
+        _jwtTokenService = jwtTokenService;
     }
 
     [HttpPost("google")]
@@ -73,7 +76,7 @@ public class AuthController : ControllerBase
             }
         }
 
-        var token = GenerateJwtToken(user);
+        var token = _jwtTokenService.GenerateToken(user);
         
         return Ok(new AuthResponse
         {
@@ -142,35 +145,6 @@ public class AuthController : ControllerBase
         {
             return null;
         }
-    }
-
-    private string GenerateJwtToken(ApplicationUser user)
-    {
-        var jwtSettings = _configuration.GetSection("Authentication:Jwt");
-        var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]!);
-        
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.NameIdentifier, user.Id),
-            new(ClaimTypes.Email, user.Email!),
-            new(ClaimTypes.Name, user.Name ?? user.Email!),
-            new(JwtRegisteredClaimNames.Sub, user.Id),
-            new(JwtRegisteredClaimNames.Email, user.Email!),
-            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
-
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(double.Parse(jwtSettings["ExpirationMinutes"]!)),
-            Issuer = jwtSettings["Issuer"],
-            Audience = jwtSettings["Audience"],
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        };
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
     }
 }
 

@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
 using ListaCompras.Core.Entities;
+using ListaCompras.Core.Services;
 using ListaCompras.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,6 +52,8 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
 builder.Services.AddCors(options =>
 {
