@@ -5,8 +5,10 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
 using ListaCompras.Core.Entities;
+using ListaCompras.Core.Repositories;
 using ListaCompras.Core.Services;
 using ListaCompras.Infrastructure.Data;
+using ListaCompras.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +56,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<IShoppingListRepository, ShoppingListRepository>();
 
 builder.Services.AddCors(options =>
 {
